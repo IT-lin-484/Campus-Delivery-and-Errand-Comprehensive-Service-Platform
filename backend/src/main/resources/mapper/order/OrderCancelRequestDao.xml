@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.order.dao.OrderCancelRequestDao">
+
+    <select id="findByOrderIdAndStatus" resultType="com.campusrunner.backend.order.entity.OrderCancelRequest">
+        SELECT id,
+               order_id,
+               requester_id,
+               runner_id,
+               reason,
+               status,
+               handled_by,
+               handle_note,
+               handled_at,
+               requester_read_at,
+               runner_read_at,
+               created_at,
+               updated_at
+        FROM order_cancel_requests
+        WHERE order_id = #{orderId}
+          AND status = #{status}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="findTopByOrderIdOrderByCreatedAtDesc" resultType="com.campusrunner.backend.order.entity.OrderCancelRequest">
+        SELECT id,
+               order_id,
+               requester_id,
+               runner_id,
+               reason,
+               status,
+               handled_by,
+               handle_note,
+               handled_at,
+               requester_read_at,
+               runner_read_at,
+               created_at,
+               updated_at
+        FROM order_cancel_requests
+        WHERE order_id = #{orderId}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="countByRequesterIdAndCreatedAtBetween" resultType="long">
+        SELECT COUNT(1)
+        FROM order_cancel_requests
+        WHERE requester_id = #{requesterId}
+          AND created_at BETWEEN #{start} AND #{end}
+    </select>
+
+    <select id="countByRunnerIdAndStatusAndRunnerReadAtIsNull" resultType="long">
+        SELECT COUNT(1)
+        FROM order_cancel_requests
+        WHERE runner_id = #{runnerId}
+          AND status = #{status}
+          AND runner_read_at IS NULL
+    </select>
+
+    <select id="countByRequesterIdAndStatusInAndRequesterReadAtIsNull" resultType="long">
+        SELECT COUNT(1)
+        FROM order_cancel_requests
+        WHERE requester_id = #{requesterId}
+          AND status IN
+          <foreach collection="statuses" item="status" open="(" separator="," close=")">
+              #{status}
+          </foreach>
+          AND requester_read_at IS NULL
+    </select>
+
+    <select id="findTop20ByRunnerIdAndStatusOrderByCreatedAtDesc"
+            resultType="com.campusrunner.backend.order.entity.OrderCancelRequest">
+        SELECT id,
+               order_id,
+               requester_id,
+               runner_id,
+               reason,
+               status,
+               handled_by,
+               handle_note,
+               handled_at,
+               requester_read_at,
+               runner_read_at,
+               created_at,
+               updated_at
+        FROM order_cancel_requests
+        WHERE runner_id = #{runnerId}
+          AND status = #{status}
+        ORDER BY created_at DESC
+        LIMIT 20
+    </select>
+
+    <select id="findTop20ByRequesterIdAndStatusInOrderByHandledAtDesc"
+            resultType="com.campusrunner.backend.order.entity.OrderCancelRequest">
+        SELECT id,
+               order_id,
+               requester_id,
+               runner_id,
+               reason,
+               status,
+               handled_by,
+               handle_note,
+               handled_at,
+               requester_read_at,
+               runner_read_at,
+               created_at,
+               updated_at
+        FROM order_cancel_requests
+        WHERE requester_id = #{requesterId}
+          AND status IN
+          <foreach collection="statuses" item="status" open="(" separator="," close=")">
+              #{status}
+          </foreach>
+        ORDER BY handled_at DESC
+        LIMIT 20
+    </select>
+
+    <update id="markRunnerUnreadAsRead">
+        UPDATE order_cancel_requests
+        SET runner_read_at = #{readAt}
+        WHERE runner_id = #{runnerId}
+          AND status = #{status}
+          AND runner_read_at IS NULL
+    </update>
+
+    <update id="markRequesterUnreadAsRead">
+        UPDATE order_cancel_requests
+        SET requester_read_at = #{readAt}
+        WHERE requester_id = #{requesterId}
+          AND status IN
+          <foreach collection="statuses" item="status" open="(" separator="," close=")">
+              #{status}
+          </foreach>
+          AND requester_read_at IS NULL
+    </update>
+</mapper>

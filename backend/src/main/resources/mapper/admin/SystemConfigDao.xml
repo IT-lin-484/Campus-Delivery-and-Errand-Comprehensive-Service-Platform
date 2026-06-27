@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.admin.dao.SystemConfigDao">
+
+    <select id="findTopByOrderByIdAsc" resultType="com.campusrunner.backend.admin.entity.SystemConfig">
+        SELECT id,
+               cancel_window_runner_minutes,
+               cancel_window_requester_minutes,
+               expire_grace_minutes,
+               max_concurrent_orders,
+               max_daily_accept,
+               created_at,
+               updated_at
+        FROM system_config
+        ORDER BY id ASC
+        LIMIT 1
+    </select>
+</mapper>

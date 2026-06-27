@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.social.dao.FriendshipDao">
+
+    <select id="existsByUserIdAndFriendUserIdAndStatus" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) &gt; 0 THEN TRUE ELSE FALSE END
+        FROM friendships
+        WHERE user_id = #{userId}
+          AND friend_user_id = #{friendUserId}
+          AND status = #{status}
+    </select>
+
+    <select id="findByUserIdAndFriendUserIdAndStatus"
+            resultType="com.campusrunner.backend.social.entity.Friendship">
+        SELECT id,
+               user_id,
+               friend_user_id,
+               status,
+               created_at,
+               updated_at
+        FROM friendships
+        WHERE user_id = #{userId}
+          AND friend_user_id = #{friendUserId}
+          AND status = #{status}
+        LIMIT 1
+    </select>
+
+    <select id="findByUserIdAndStatusOrderByUpdatedAtDesc"
+            resultType="com.campusrunner.backend.social.entity.Friendship">
+        SELECT id,
+               user_id,
+               friend_user_id,
+               status,
+               created_at,
+               updated_at
+        FROM friendships
+        WHERE user_id = #{userId}
+          AND status = #{status}
+        ORDER BY updated_at DESC
+    </select>
+
+    <delete id="deleteByUserIdAndFriendUserId">
+        DELETE FROM friendships
+        WHERE user_id = #{userId}
+          AND friend_user_id = #{friendUserId}
+    </delete>
+</mapper>

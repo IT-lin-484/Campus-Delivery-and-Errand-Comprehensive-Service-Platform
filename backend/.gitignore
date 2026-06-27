@@ -1,0 +1,9 @@
+/target/
+/uploads/
+*.log
+*.tmp
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

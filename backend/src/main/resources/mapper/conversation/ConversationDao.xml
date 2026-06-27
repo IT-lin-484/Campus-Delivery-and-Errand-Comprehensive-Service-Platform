@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.conversation.dao.ConversationDao">
+
+    <select id="findByUserAIdAndUserBId" resultType="com.campusrunner.backend.conversation.entity.Conversation">
+        SELECT id,
+               user_a_id,
+               user_b_id,
+               last_message_id,
+               last_message_preview,
+               last_message_at,
+               last_read_message_id_by_a,
+               last_read_message_id_by_b,
+               created_at,
+               updated_at
+        FROM conversations
+        WHERE user_a_id = #{userAId}
+          AND user_b_id = #{userBId}
+        LIMIT 1
+    </select>
+</mapper>

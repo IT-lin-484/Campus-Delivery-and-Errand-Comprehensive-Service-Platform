@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.conversation.dao.ChatMessageDao">
+
+    <select id="findTopByConversationIdOrderByIdDesc"
+            resultType="com.campusrunner.backend.conversation.entity.ChatMessage">
+        SELECT id,
+               conversation_id,
+               sender_id,
+               client_message_id,
+               content_type,
+               content,
+               status,
+               sent_at,
+               created_at
+        FROM messages
+        WHERE conversation_id = #{conversationId}
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <select id="countByConversationIdAndSenderIdNotAndIdGreaterThan" resultType="long">
+        SELECT COUNT(1)
+        FROM messages
+        WHERE conversation_id = #{conversationId}
+          AND sender_id &lt;&gt; #{senderId}
+          AND id &gt; #{id}
+    </select>
+
+    <select id="countByConversationIdAndSenderIdNot" resultType="long">
+        SELECT COUNT(1)
+        FROM messages
+        WHERE conversation_id = #{conversationId}
+          AND sender_id &lt;&gt; #{senderId}
+    </select>
+
+    <select id="countTemporaryMessagesByConversationId" resultType="long">
+        SELECT COUNT(1)
+        FROM messages
+        WHERE conversation_id = #{conversationId}
+          AND client_message_id IS NOT NULL
+    </select>
+</mapper>

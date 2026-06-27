@@ -1,0 +1,23 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+**/.idea/
+**/.vscode/
+**/*.iml
+
+# Git should track source code, not local build outputs
+**/target/
+**/build/
+**/.dart_tool/
+frontend/.flutter-plugins-dependencies
+frontend/android/local.properties
+
+# Local runtime artifacts
+backend/uploads/
+frontend/view.xml
+frontend/view-profile.xml
+
+# Local delivery materials, not part of the app source
+答辩材料/

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusrunner.backend.order.dao.OrderDao">
+
+    <update id="acceptOrder">
+        UPDATE orders
+        SET runner_id = #{runnerId},
+            status = #{acceptedStatus}
+        WHERE id = #{orderId}
+          AND status = #{openStatus}
+          AND runner_id IS NULL
+          AND requester_id &lt;&gt; #{runnerId}
+    </update>
+
+    <select id="countByRequesterId" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE requester_id = #{requesterId}
+    </select>
+
+    <select id="countByRunnerId" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE runner_id = #{runnerId}
+    </select>
+
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE status = #{status}
+    </select>
+
+    <select id="countByRequesterIdAndStatuses" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE requester_id = #{requesterId}
+          AND status IN
+        <foreach collection="statuses" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <select id="countByRunnerIdAndStatuses" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE runner_id = #{runnerId}
+          AND status IN
+        <foreach collection="statuses" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <select id="countByAbnormalFlagTrue" resultType="long">
+        SELECT COUNT(1)
+        FROM orders
+        WHERE abnormal_flag = TRUE
+    </select>
+
+    <select id="existsCommunicationOrderBetweenUsers" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) &gt; 0 THEN TRUE ELSE FALSE END
+        FROM orders
+        WHERE status IN
+        <foreach collection="statuses" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+          AND (
+              (requester_id = #{userAId} AND runner_id = #{userBId})
+              OR
+              (requester_id = #{userBId} AND runner_id = #{userAId})
+          )
+    </select>
+</mapper>
