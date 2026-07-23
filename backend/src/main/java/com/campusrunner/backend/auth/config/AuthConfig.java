@@ -5,8 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+
 /**
- * 璁よ瘉妯″潡鍩虹閰嶇疆銆? */
+ * 璁よ瘉妯″潡鍩虹閰嶇疆銆?
+ */
 @Configuration
 public class AuthConfig {
 
