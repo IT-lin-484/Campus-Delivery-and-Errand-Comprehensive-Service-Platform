@@ -165,7 +165,7 @@ public class AuthServiceImpl implements AuthService {
         }
         String token = authorizationHeader.substring("Bearer ".length()).trim();
         if (token.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token 不能为空");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token 不能为空！");
         }
         return token;
     }
